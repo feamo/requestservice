@@ -13,6 +13,37 @@ type User struct {
 	Password string `json:"password"`
 }
 
+func main() {
+	user := User{
+		ID: 1,
+	}
+
+	// initialize http client
+	client := &http.Client{}
+
+	// marshal User to json
+	userBytes, err := json.Marshal(user)
+	if err != nil {
+		panic(err)
+	}
+
+	// set the HTTP method, url, and request body
+	req, err := http.NewRequest(http.MethodDelete, "http://localhost:8080/user/1", bytes.NewBuffer(userBytes))
+	if err != nil {
+		panic(err)
+	}
+
+	// set the request header Content-Type for json
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+
+	defer resp.Body.Close()
+
+	fmt.Println(resp.StatusCode)
+}
+
 //func userGet() {
 //	resp, err := http.Get("http://localhost:8080/user/1")
 //	if err != nil {
@@ -108,34 +139,3 @@ type User struct {
 //
 //	fmt.Println(resp.StatusCode)
 //}
-
-func main() {
-	user := User{
-		ID: 1,
-	}
-
-	// initialize http client
-	client := &http.Client{}
-
-	// marshal User to json
-	userBytes, err := json.Marshal(user)
-	if err != nil {
-		panic(err)
-	}
-
-	// set the HTTP method, url, and request body
-	req, err := http.NewRequest(http.MethodDelete, "http://localhost:8080/user/1", bytes.NewBuffer(userBytes))
-	if err != nil {
-		panic(err)
-	}
-
-	// set the request header Content-Type for json
-	resp, err := client.Do(req)
-	if err != nil {
-		panic(err)
-	}
-
-	defer resp.Body.Close()
-
-	fmt.Println(resp.StatusCode)
-}
